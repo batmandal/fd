@@ -15,10 +15,10 @@
 /out/
 
 # production
-/build
+**/build
 
 # misc
-.DS_Store
+**.DS_Store
 *.pem
 
 # debug
@@ -30,7 +30,7 @@ yarn-error.log*
 .env*.local
 
 # vercel
-.vercel
+**.vercel
 
 # typescript
 *.tsbuildinfo
