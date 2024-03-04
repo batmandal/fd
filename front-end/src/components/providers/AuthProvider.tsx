@@ -35,6 +35,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
+  const [checker, setChecker] = useState(false);
   const [userData, setUserData] = useState<UserType | null>(null);
   const [checkAdmin, setCheckAdmin] = useState<boolean>(false);
 
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     } else {
       setIsLogged(false);
     }
-  }, []);
+  }, [checker]);
 
   const login = async (email: String, password: String) => {
     try {
@@ -60,6 +61,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       localStorage.setItem("token", token);
 
       toast.success(data.message);
+
+      setChecker((prev) => !prev);
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.warning(error.response?.data.message ?? error.message);
@@ -71,6 +74,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     localStorage.removeItem("token");
 
     setIsLogged(false);
+    setChecker((prev) => !prev);
   };
 
   const signup = async (name: String, email: String, password: String) => {

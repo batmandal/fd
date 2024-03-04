@@ -66,7 +66,7 @@ export function Header() {
               <Typography
                 fontWeight="800"
                 fontSize="16px"
-                color="primary.main"
+                color={pathName.includes("admin") ? "primary.main" : "black"}
                 onClick={() => {
                   router.push("/admin");
                 }}
