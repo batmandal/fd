@@ -17,15 +17,20 @@ export const getUser: RequestHandler = async (req, res) => {
     });
   }
 
-  const payload = jwt.verify(authorization, "secret") as JwtPayload;
-  const { email } = payload;
+  try {
+    const payload = jwt.verify(authorization, "secret") as JwtPayload;
+    const { email } = payload;
 
-  const user = await UserModel.findOne({ email: email });
+    const user = await UserModel.findOne({ email: email });
 
-  if (!user) {
-    return res.status(401).json({
-      message: "not found user",
-    });
+    if (!user) {
+      return res.status(401).json({
+        message: "not found user",
+      });
+    }
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(401).json({ message: "Unauthorized" });
   }
-  res.json(user);
 };

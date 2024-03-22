@@ -11,6 +11,7 @@ import { FoodsModal } from "./FoodsModal";
 
 type FoodsProps = {
   type?: string;
+  onClick: () => void;
 };
 
 export type FoodType = {
@@ -35,16 +36,16 @@ export function Foods(props: FoodsProps) {
     refetch,
   } = useFetch<FoodType[]>("http://localhost:3008/foods");
 
-  const { type } = props;
+  const { type, onClick } = props;
   const typeTranslate = () => {
     if (type == "Амттан") {
-      return "appetizer";
+      return "Dessert";
     }
     if (type == "Үндсэн хоол") {
-      return "main";
+      return "Breakfast";
     }
     if (type == "Салад ба зууш") {
-      return "beverage";
+      return "Beverage";
     }
     if (type == "Хямдралтай") {
       return "onSale";
@@ -79,6 +80,7 @@ export function Foods(props: FoodsProps) {
           fontWeight={400}
           fontSize="14px"
           color="primary"
+          onClick={onClick}
         >
           Бүгдийг харах <ArrowRight />
         </Typography>
@@ -87,6 +89,7 @@ export function Foods(props: FoodsProps) {
       <Grid container spacing={2}>
         {foodData
           .filter((food) => food.categoryName === typeTranslate())
+          .filter((food, index) => index < 4)
           .map((item) => {
             return (
               <Grid item lg={3} md={4} sm={6} xs={12}>

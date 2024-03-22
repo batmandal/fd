@@ -1,3 +1,4 @@
+"use client";
 import { Book } from "@/assets/svg/Book";
 
 import { Soup } from "@/assets/svg/Soup";
@@ -6,6 +7,7 @@ import { FastDelivery } from "@/components/FastDelivery";
 
 import { Foods } from "@/components/Foods";
 import { Stack, Grid, Container } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const fastDeliveries = [
   {
@@ -38,6 +40,7 @@ const foodChoice = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
   return (
     <Stack style={{ position: "relative" }}>
       <Stack
@@ -94,7 +97,12 @@ export default function HomePage() {
         </Stack>
         <Stack gap={10} paddingBottom="82px">
           {foodChoice.map((item) => (
-            <Foods type={item.type} />
+            <Foods
+              type={item.type}
+              onClick={() => {
+                router.push("/menu-page");
+              }}
+            />
           ))}
         </Stack>
       </Container>

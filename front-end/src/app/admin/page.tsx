@@ -4,15 +4,13 @@ import { AddCategory } from "@/components/AddCategory";
 import { CreateFood } from "@/components/CreateFood";
 import { Food } from "@/components/Food";
 import { FoodType } from "@/components/Foods";
-import { useData } from "@/components/providers/DataProvider";
 
 import { useFetch } from "@/hooks/useFetch";
 import { MoreVert } from "@mui/icons-material";
 import { Container, Grid, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export type CategoryStyleType = {
-  // _id: string;
   categoryName: string;
   onClick: () => void;
   sx: any;
@@ -30,17 +28,18 @@ export default function Admin() {
     loading: foodLoading,
     error: foodError,
   } = useFetch<FoodType[]>("http://localhost:3008/foods");
-  console.log(foodData);
 
   const [active, setActive] = useState("Breakfast");
+
+  useEffect(() => {}, []);
 
   return (
     <Container maxWidth="lg" sx={{ display: "flex", height: "fit-content" }}>
       <Stack width="25%" height="100%" paddingRight={3} gap={5}>
         <Typography fontSize="22px" fontWeight={700}>
-          Food menu{" "}
+          {"Food menu"}
         </Typography>
-        <Stack gap="26px">
+        <Stack gap="26px" marginBottom={3}>
           {categoryData.map((item, id) => {
             return (
               <CategoryStyle
@@ -75,10 +74,10 @@ export default function Admin() {
           <Grid container spacing={2}>
             {foodData
               .filter((food) => food.categoryName === active)
-              .map((food) => {
+              .map((food, index) => {
                 return (
                   <Grid item lg={3} md={4} sm={6} xs={12}>
-                    <Food {...food} onClick={() => {}} />
+                    <Food {...food} key={index} onClick={() => {}} />
                   </Grid>
                 );
               })}

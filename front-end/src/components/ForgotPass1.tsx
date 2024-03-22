@@ -65,6 +65,7 @@ export function ForgotPass1(props: ForgotPassProps) {
             }}
             onClick={() => {
               formik.handleSubmit();
+              setStep(1);
             }}
           />
         </Stack>

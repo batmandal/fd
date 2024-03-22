@@ -14,11 +14,18 @@ export type CardType = {
 };
 
 export function Card({ image, name, price, ingredient, count }: CardType) {
-  const { basketFood, setBasketFood } = useData();
+  const { basketFood, setBasketFood, foodCount, setFoodCount } = useData();
+
+  const changeFoodCount = (change: number) => {
+    setFoodCount((prev) => {
+      if (change < 0 && prev == 1) return prev;
+      return change + prev;
+    });
+  };
 
   return (
     <Stack direction="row" gap={2}>
-      <Stack width="50%" borderRadius={1} overflow="hidden">
+      <Stack width="50%" borderRadius={1} overflow="hidden" height={"172px"}>
         <img src={`${image}`} />
       </Stack>
       <Stack gap={1} justifyContent="space-between" width="50%">
@@ -52,7 +59,11 @@ export function Card({ image, name, price, ingredient, count }: CardType) {
           {ingredient}
         </Typography>
         <Stack direction="row" justifyContent="space-between">
-          <CustomButton label="-" variant="contained" />
+          <CustomButton
+            label="-"
+            variant="contained"
+            onClick={() => changeFoodCount(-1)}
+          />
           <Typography
             fontWeight={500}
             fontSize="16px"
@@ -61,7 +72,11 @@ export function Card({ image, name, price, ingredient, count }: CardType) {
           >
             {count}
           </Typography>
-          <CustomButton label="+" variant="contained" />
+          <CustomButton
+            label="+"
+            variant="contained"
+            onClick={() => changeFoodCount(1)}
+          />
         </Stack>
       </Stack>
     </Stack>

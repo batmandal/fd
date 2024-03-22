@@ -35,7 +35,11 @@ export function AddCategory() {
         }}
         direction="row"
         gap={1}
-        sx={{ color: "#5E6166", cursor: "pointer" }}
+        sx={{
+          color: "#5E6166",
+          cursor: "pointer",
+          ":hover": { background: "#18BA51", color: "white" },
+        }}
         border="solid 1px #D6D8DB"
         width="100%"
         borderRadius={2}

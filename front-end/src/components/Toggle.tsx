@@ -1,23 +1,13 @@
 import { Stack } from "@mui/material";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type ToggleProps = {
-  style?: any;
+  onClick: any;
+  onToggle: boolean;
 };
 
 export function Toggle(props: ToggleProps) {
-  const { style } = props;
-
-  const [onToggle, setOnToggle] = useState(false);
-
-  const active = () => {
-    if (onToggle === true) {
-      return setOnToggle(false);
-    }
-    if (onToggle === false) {
-      return setOnToggle(true);
-    }
-  };
+  const { onClick, onToggle } = props;
 
   return (
     <Stack
@@ -26,14 +16,13 @@ export function Toggle(props: ToggleProps) {
         justifyContent: `${onToggle === true ? "flex-end" : "flex-start"}`,
         cursor: "pointer",
       }}
-      style={style}
+      // style={style}
       width="28px"
       height="16px"
       borderRadius="20px"
-      justifyContent="center"
       padding="2px"
       direction="row"
-      onClick={active}
+      onClick={onClick}
     >
       <Stack
         borderRadius="50%"

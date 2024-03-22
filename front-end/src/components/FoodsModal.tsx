@@ -14,7 +14,6 @@ export function FoodsModal({ open, handleClose, food }: FoodsModalProps) {
       open={open}
       onClose={handleClose}
       sx={{ display: "grid", placeContent: "center" }}
-      // onClick={handleClose}
     >
       <>{food && <ModalFood onClick={handleClose} {...food} />}</>
     </Modal>

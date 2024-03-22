@@ -20,11 +20,19 @@ type DataContextType = {
   addFoodToCart: (params: CartFood) => void;
   imageUrl: string;
   setImageUrl: Dispatch<SetStateAction<string>>;
-  foodPost: (props: FoodPostType) => Promise<void>;
+  foodPost: (
+    name: string,
+    categoryName: string,
+    ingredient: string,
+    price: number,
+    onSale: boolean,
+    saled: number,
+    image: string
+  ) => void;
   totalPrice: number;
   setTotalPrice: Dispatch<SetStateAction<number>>;
-
-  // addPrice: any;
+  foodCount: number;
+  setFoodCount: Dispatch<SetStateAction<number>>;
 };
 
 export type CartFood = {
@@ -32,20 +40,13 @@ export type CartFood = {
   quantity: number;
 };
 
-export type FoodPostType = {
-  name: string;
-  categoryName: string;
-  ingredient: string;
-  price: string;
-  onSale: boolean;
-  image: string;
-};
-
 const DataContext = createContext<DataContextType>({} as DataContextType);
 
 export const DataProvider = ({ children }: PropsWithChildren) => {
+  const [isFirstRender, setIsFirstRender] = useState(true);
   const [basketFood, setBasketFood] = useState<CartFood[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [foodCount, setFoodCount] = useState<number>(1);
 
   const [imageUrl, setImageUrl] = useState<string>("/default.webp");
 
@@ -61,8 +62,15 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const foodPost = async (props: FoodPostType) => {
-    const { name, categoryName, ingredient, price, onSale, image } = props;
+  const foodPost = async (
+    name: string,
+    categoryName: string,
+    ingredient: string,
+    price: number,
+    onSale: boolean,
+    saled: number,
+    image: string
+  ) => {
     try {
       const { data } = await api.post("/foods", {
         name,
@@ -70,6 +78,7 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
         ingredient,
         price,
         onSale,
+        saled,
         image,
       });
 
@@ -84,19 +93,20 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
       return [...prev, { food, quantity }];
     });
   };
+  useEffect(() => {
+    const basketFood = localStorage.getItem("cart");
+    if (basketFood) {
+      const data = JSON.parse(basketFood);
+      setBasketFood(data);
+    }
+    setIsFirstRender(false);
+  }, []);
 
   useEffect(() => {
-    if (!basketFood.length) return;
+    if (isFirstRender) return;
     const data = JSON.stringify(basketFood);
     localStorage.setItem("cart", data);
   }, [basketFood]);
-
-  useEffect(() => {
-    const rawData = localStorage.getItem("cart");
-    if (!rawData) return;
-    const data = JSON.parse(rawData);
-    setBasketFood(data);
-  }, []);
 
   return (
     <DataContext.Provider
@@ -110,6 +120,8 @@ export const DataProvider = ({ children }: PropsWithChildren) => {
         foodPost,
         totalPrice,
         setTotalPrice,
+        foodCount,
+        setFoodCount,
       }}
     >
       {children}

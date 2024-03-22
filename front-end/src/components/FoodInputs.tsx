@@ -54,7 +54,7 @@ export function Inputs(props: inputsType & TextFieldProps) {
               placeholder={placeholder}
               type={type}
               style={{ width: "100%" }}
-              onChange={(event) => setFoodImage(event.target.value)}
+              // onChange={(event) => setFoodImage(event.target.value)}
               sx={{
                 display: `${label === "Хоолны ангилал" ? "none" : null}`,
               }}

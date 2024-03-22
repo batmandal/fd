@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export const Basket = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { basketFood, totalPrice, setTotalPrice } = useData();
+  const { basketFood, totalPrice, setTotalPrice, foodCount } = useData();
 
   useEffect(() => {
     let total = 0;
@@ -33,7 +33,7 @@ export const Basket = () => {
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
       >
-        <Stack height={"100vh"} border={"1px solid black"} width={"100%"}>
+        <Stack width={"100%"} justifyContent="space-between">
           <Stack
             direction="row"
             alignItems="center"
@@ -73,6 +73,7 @@ export const Basket = () => {
                     price={basketFood.food.price}
                     ingredient={basketFood.food.ingredient}
                     count={basketFood.quantity}
+                    // count={foodCount}
                   />
                 );
               })}
@@ -81,13 +82,14 @@ export const Basket = () => {
 
           <Stack
             direction="row"
-            mt={0}
+            // mt={0}
             width="100%"
             padding=" 49px 0px 69px 0px"
             gap="10px"
             boxShadow="0px 0px 8px 8px #BBBECD33"
             bgcolor="white"
-            border={"1px solid black"}
+            bottom={0}
+            justifyContent={"flex-end"}
           >
             <Container sx={{ display: "flex" }}>
               <Stack width="256px">
@@ -111,20 +113,6 @@ export const Basket = () => {
             </Container>
           </Stack>
         </Stack>
-        {/* <Stack
-          width={500}
-          height="100%"
-          border={5}
-          justifyContent="space-between"
-        >
-          <Stack border="red solid 4px" width="100%" height={100}></Stack>
-          <Stack
-            border="red solid 4px"
-            width="100%"
-            height={100}
-            position="sticky"
-          ></Stack>
-        </Stack> */}
       </Drawer>
     </>
   );

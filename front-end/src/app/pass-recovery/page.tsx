@@ -18,21 +18,22 @@ const PasswordRecovery = () => {
   const [step, setStep] = useState<number>(0);
   const [email, setEmail] = useState("");
 
-  console.log(email);
+  const action = () => {
+    if (step == 0) {
+      return <ForgotPass1 setStep={setStep} email={email} />;
+    }
+    if (step == 1) {
+      return <ForgotPass2 setStep={setStep} email={email} />;
+    }
+    if (step == 2) {
+      return <ForgotPass3 setStep={setStep} email={email} />;
+    }
+  };
 
   return (
-    <>
-      <Stack justifyContent="center" alignItems="center">
-        {step === 1 && (
-          <ForgotPass1 setStep={setStep} email={email} setEmail={setEmail} />
-        )}
-        {step === 2 && <ForgotPass2 setStep={setStep} email={email} />}
-        {step === 3 && <ForgotPass3 setStep={setStep} email={email} />}
-      </Stack>
-      <ForgotPass1 setStep={setStep} email={email} setEmail={setEmail} />
-      <ForgotPass2 setStep={setStep} email={email} setEmail={setEmail} />
-      <ForgotPass3 setStep={setStep} email={email} setEmail={setEmail} />
-    </>
+    <Stack display="grid" sx={{ placeContent: "center" }}>
+      {action()}
+    </Stack>
   );
 };
 

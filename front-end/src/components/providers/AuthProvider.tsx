@@ -107,7 +107,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       }
 
       setUserData(data);
-      console.log(data);
     } catch (error) {}
   };
 

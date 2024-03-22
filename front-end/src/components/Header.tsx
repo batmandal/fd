@@ -1,15 +1,20 @@
 "use client";
 
-import { Stack, Typography, Container } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Container,
+  TextField,
+  InputAdornment,
+} from "@mui/material";
 import { CustomInput } from "@/components/Input";
 import { Choice } from "@/components";
-import { PersonOutlineOutlined } from "@mui/icons-material";
+import { PersonOutlineOutlined, SearchOutlined } from "@mui/icons-material";
 import { Pinecone } from "@/assets/svg/Pinecone";
 import { usePathname, useRouter } from "next/navigation";
 
 import { LogInModal } from "./LogIn";
 import { useAuth } from "./providers/AuthProvider";
-import { useEffect, useState } from "react";
 import { Basket } from "./Drawer";
 import Link from "next/link";
 
@@ -44,11 +49,11 @@ export function Header() {
         <Stack direction="row" style={{ alignItems: "center" }}>
           <Pinecone />
           <Stack direction="row" gap={1} alignItems="center">
-            {text.map((a, i) => {
+            {text.map((a, index) => {
               return (
                 <Link href={a.link}>
                   <Typography
-                    key={i}
+                    key={index}
                     fontWeight={700}
                     fontSize="14px"
                     padding="12px 16px"
@@ -77,7 +82,23 @@ export function Header() {
           </Stack>
         </Stack>
         <Stack direction="row" gap={1} style={{ alignItems: "center" }}>
-          <CustomInput placeholder="хайх" size="small" type="search" />
+          <TextField
+            type="search"
+            placeholder="Хайлт"
+            variant="standard"
+            sx={{
+              border: "solid 1px black",
+              borderRadius: "8px",
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment sx={{ padding: "8px" }} position="start">
+                  <SearchOutlined />
+                </InputAdornment>
+              ),
+              disableUnderline: true,
+            }}
+          />
           <Basket />
           {isLogged === true ? (
             <Choice

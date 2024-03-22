@@ -1,87 +1,98 @@
 "use client";
 
 import { Add, Close } from "@mui/icons-material";
-import { Button, Modal, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Button,
+  MenuItem,
+  Modal,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { ChangeEvent, useState } from "react";
 import * as yup from "yup";
-import { Inputs } from "./FoodInputs";
 import { useFormik } from "formik";
 import { useData } from "./providers/DataProvider";
-
-// type Input = {
-//   label: string;
-//   placeholder: string;
-//   type: string;
-//   name:
-// };
-
-const inputs2 = [
-  {
-    label: "Хоолны нэр",
-    placeholder: "Хоолны нэр",
-    type: "text",
-    name: "name",
-  },
-  {
-    label: "Хоолны ангилал",
-    placeholder: "Хоолны ангилал",
-    type: "select",
-    name: "category",
-  },
-  {
-    label: "Хоолны орц",
-    placeholder: "Хоолны орц",
-    type: "text",
-    name: "ingredient",
-  },
-  {
-    label: "Хоолны үнэ",
-    placeholder: "Хоолны үнэ",
-    type: "number",
-    name: "price",
-  },
-  {
-    label: "Хямдралтай эсэх",
-    placeholder: "Хоолны нэр",
-    type: "number",
-    name: "onSale",
-  },
-  {
-    label: "Хоолны зураг",
-    placeholder: "Хоолны нэр",
-    type: "file",
-    name: "image",
-  },
-];
+import { useFetch } from "@/hooks/useFetch";
+import { CategoryStyleType } from "@/app/admin/page";
+import { Toggle } from "./Toggle";
 
 const validationSchema = yup.object({
-  name: yup.string().required(),
-  category: yup.string().required(),
-  price: yup.number().required(),
-  onSale: yup.number(),
-  image: yup.string().required(),
+  name: yup.string(),
+  categoryName: yup.string(),
   ingredient: yup.string(),
+  price: yup.number(),
+  onSale: yup.number(),
+  saled: yup.number(),
+  image: yup.string(),
 });
 
 export function CreateFood() {
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = () => setOpen(false);
   const { foodPost } = useData();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [newImageUrl, setNewImageUrl] = useState("");
+  const [onToggle, setOnToggle] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
       name: "",
-      category: "",
-      price: "",
+      categoryName: "",
       ingredient: "",
+      price: 0,
       onSale: "",
+      saled: 0,
       image: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(formik.values.name);
+      foodPost(
+        values.name,
+        values.categoryName,
+        values.ingredient,
+        values.price,
+        onToggle,
+        values.saled,
+        newImageUrl
+      );
     },
   });
+
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleImageUpload = async () => {
+    if (selectedFile) {
+      try {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        const response = await fetch(
+          "https://api.cloudinary.com/v1_1/dl0k92sfh/upload?upload_preset=wug703jq",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        setNewImageUrl(data.secure_url);
+        console.log(data.secure_url, "imageURL");
+      } catch (error) {
+        console.error("Image upload error:", error);
+      }
+    }
+  };
+
+  const {
+    datas: categoryData,
+    loading: categoryLoading,
+    error: categoryError,
+  } = useFetch<CategoryStyleType[] | null[]>(
+    "http://localhost:3008/categories"
+  );
 
   return (
     <>
@@ -127,29 +138,124 @@ export function CreateFood() {
               Create food
             </Typography>
           </Stack>
-          <Stack padding={3} gap={2}>
-            {inputs2.map((inp) => {
-              const { placeholder, type, label, name } = inp;
-              return (
-                <Inputs
-                  name={name}
-                  placeholder={placeholder}
-                  onChange={formik.handleChange}
-                  value={formik.values[name as keyof typeof formik.values]}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched[name as keyof typeof formik.values] &&
-                    Boolean(formik.errors[name as keyof typeof formik.values])
-                  }
-                  helperText={
-                    formik.touched[name as keyof typeof formik.values] &&
-                    formik.errors[name as keyof typeof formik.values]
-                  }
-                  type={type}
-                  label={label}
-                />
-              );
-            })}
+          <Stack padding={3}>
+            <Typography>{"Хоолны нэр"}</Typography>
+            <TextField
+              placeholder="Хоолны нэр оруулна уу"
+              type="text"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+            />
+            <Typography>{"Хоолны ангилал"}</Typography>
+            <TextField
+              placeholder="Хоолны ангилал сонгоно уу"
+              select={true}
+              name="categoryName"
+              value={formik.values.categoryName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.categoryName &&
+                Boolean(formik.errors.categoryName)
+              }
+              helperText={
+                formik.touched.categoryName && formik.errors.categoryName
+              }
+            >
+              {categoryData.map((category) => {
+                return (
+                  <MenuItem
+                    key={category?.categoryName}
+                    value={category?.categoryName}
+                  >
+                    {" "}
+                    {category?.categoryName}{" "}
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+            <Typography>{"Хоолны орц"}</Typography>
+            <TextField
+              placeholder="Хоолны орц оруулна уу"
+              type="text"
+              name="ingredient"
+              value={formik.values.ingredient}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.ingredient && Boolean(formik.errors.ingredient)
+              }
+              helperText={formik.touched.ingredient && formik.errors.ingredient}
+            />
+
+            <Typography>{"Хоолны үнэ"}</Typography>
+            <TextField
+              placeholder="Хоолны үнэ оруулна уу"
+              type="number"
+              name="price"
+              value={formik.values.price}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.price && Boolean(formik.errors.price)}
+              helperText={formik.touched.price && formik.errors.price}
+            />
+            <Toggle
+              onClick={() => {
+                setOnToggle((prev) => !prev);
+              }}
+              onToggle={onToggle}
+            />
+            <TextField
+              placeholder="saled percent"
+              type="number"
+              name="saled"
+              disabled={onToggle == false}
+              value={formik.values.saled}
+              onChange={formik.handleChange}
+            />
+            <Typography>{"Хоолны зураг"}</Typography>
+            <Stack
+              direction={"row"}
+              border={"solid 2px black"}
+              height={"150px"}
+            >
+              <TextField
+                sx={{
+                  width: "50%",
+                  height: "100%",
+                  display: "grid",
+                  placeContent: "center",
+                }}
+                type="file"
+                name="image"
+                value={formik.values.image}
+                onChange={handleImageChange}
+              />
+              <Stack width={"50%"}>
+                {newImageUrl && (
+                  <Stack
+                    border={"solid 2px black"}
+                    width={"100%"}
+                    height={"100%"}
+                    overflow={"hidden"}
+                    bgcolor={"red"}
+                  >
+                    <img
+                      src={`${newImageUrl}`}
+                      alt="uploaded"
+                      style={{ objectFit: "contain" }}
+                    />
+                  </Stack>
+                )}
+                <Button variant="contained" onClick={handleImageUpload}>
+                  {"upload image"}
+                </Button>
+              </Stack>
+            </Stack>
           </Stack>
           <Stack
             direction="row"
@@ -164,10 +270,17 @@ export function CreateFood() {
               Clear
             </Button>
             <Button
+              disabled={
+                !formik.values.name ||
+                !formik.values.categoryName ||
+                !formik.values.ingredient ||
+                !formik.values.price
+              }
               variant="contained"
-              sx={{ background: "#393939", color: "white" }}
+              // sx={{ background: "#393939", color: "white" }}
               onClick={() => {
                 formik.handleSubmit();
+                handleClose();
               }}
             >
               Continue

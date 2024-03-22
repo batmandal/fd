@@ -11,7 +11,7 @@ export default function FoodOrder() {
       display="grid"
       sx={{ placeContent: "center" }}
     >
-      <Stack direction="row" width="100%" gap="15%">
+      <Stack direction="row" width="100%" gap="12%">
         <OrderIntro
           label="Хаягийн мэдээлэл оруулах"
           title="Алхам 1"

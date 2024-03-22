@@ -6,20 +6,18 @@ import { CustomButton } from "@/components";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { FoodType } from "./Foods";
 import { useData } from "./providers/DataProvider";
-import { useAuth } from "./providers/AuthProvider";
-import { useState } from "react";
 
 type ModalProps = {
   onClick: () => void;
 } & FoodType;
 
 export function ModalFood(props: ModalProps) {
-  const [foodCount, setFoodCount] = useState(1);
+  // const [foodCount, setFoodCount] = useState(1);
+  const { foodCount, setFoodCount } = useData();
 
   const { onClick, ...food } = props;
   const { name, price, ingredient, image } = food;
 
-  const { isLogged } = useAuth();
   const { basketFood, setBasketFood, setTotalPrice } = useData();
 
   const changeCount = (change: number) => {
@@ -40,7 +38,7 @@ export function ModalFood(props: ModalProps) {
     >
       <Stack width="500px" height="500px" bgcolor="pink">
         <img
-          src={`/${image}`}
+          src={image}
           alt=""
           style={{ objectFit: "cover", width: "100%", height: "100%" }}
         />
@@ -110,7 +108,6 @@ export function ModalFood(props: ModalProps) {
                 } else {
                   return element;
                 }
-                // setTotalPrice(addPrice);
               });
               if (!exist) {
                 setBasketFood([...basketFood, { food, quantity: foodCount }]);
