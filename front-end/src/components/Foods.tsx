@@ -15,15 +15,15 @@ type FoodsProps = {
 };
 
 export type FoodType = {
-  _id: String;
-  name: String;
+  _id: string;
+  name: string;
   price: number;
-  discount: String;
+  discount: string;
   image: any;
-  categoryName: String;
-  ingredient: String;
+  categoryName: string;
+  ingredient: string;
   saled: number;
-  onSale: Boolean;
+  onSale: boolean;
 };
 
 export function Foods(props: FoodsProps) {
@@ -92,7 +92,7 @@ export function Foods(props: FoodsProps) {
           .filter((food, index) => index < 4)
           .map((item) => {
             return (
-              <Grid item lg={3} md={4} sm={6} xs={12}>
+              <Grid item lg={3} md={4} sm={6} xs={12} key={item._id}>
                 <Food {...item} onClick={handleOpen} />
               </Grid>
             );

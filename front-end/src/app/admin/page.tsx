@@ -6,13 +6,22 @@ import { Food } from "@/components/Food";
 import { FoodType } from "@/components/Foods";
 
 import { useFetch } from "@/hooks/useFetch";
-import { MoreVert } from "@mui/icons-material";
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { DeleteOutline, EditOutlined, MoreVert } from "@mui/icons-material";
+import {
+  Container,
+  Grid,
+  Modal,
+  Stack,
+  Typography,
+  experimentalStyled,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 
 export type CategoryStyleType = {
   categoryName: string;
   onClick: () => void;
+  onClick2: () => void;
+  clicked: boolean;
   sx: any;
 };
 
@@ -27,11 +36,14 @@ export default function Admin() {
     datas: foodData,
     loading: foodLoading,
     error: foodError,
+    refetch: foodRefetch,
   } = useFetch<FoodType[]>("http://localhost:3008/foods");
 
   const [active, setActive] = useState("Breakfast");
 
   useEffect(() => {}, []);
+
+  const [clicked, setClicked] = useState(false);
 
   return (
     <Container maxWidth="lg" sx={{ display: "flex", height: "fit-content" }}>
@@ -45,7 +57,11 @@ export default function Admin() {
               <CategoryStyle
                 key={id}
                 categoryName={item.categoryName}
-                onClick={() => setActive(item.categoryName)}
+                onClick={() => {
+                  setActive(item.categoryName);
+                }}
+                onClick2={() => setClicked((prev) => !prev)}
+                clicked={clicked}
                 sx={{
                   background: `${
                     active === item.categoryName ? "#18BA51" : null
@@ -68,7 +84,7 @@ export default function Admin() {
           <Typography fontWeight={700} fontSize="22px">
             Breakfast
           </Typography>
-          <CreateFood />
+          <CreateFood refetch={foodRefetch} />
         </Stack>
         <Stack>
           <Grid container spacing={2}>
@@ -76,8 +92,8 @@ export default function Admin() {
               .filter((food) => food.categoryName === active)
               .map((food, index) => {
                 return (
-                  <Grid item lg={3} md={4} sm={6} xs={12}>
-                    <Food {...food} key={index} onClick={() => {}} />
+                  <Grid item lg={3} md={4} sm={6} xs={12} key={index}>
+                    <Food {...food} onClick={() => {}} />
                   </Grid>
                 );
               })}
@@ -87,8 +103,8 @@ export default function Admin() {
     </Container>
   );
 }
-export function CategoryStyle(props: CategoryStyleType) {
-  const { categoryName, onClick, sx } = props;
+function CategoryStyle(props: CategoryStyleType) {
+  const { categoryName, onClick, sx, clicked, onClick2 } = props;
 
   return (
     <Stack
@@ -105,11 +121,47 @@ export function CategoryStyle(props: CategoryStyleType) {
       py={1}
       onClick={onClick}
       sx={sx}
+      position={"relative"}
     >
       {categoryName}
-      <Stack>
+      <Stack bgcolor={"red"} onClick={onClick2}>
         <MoreVert />
+        <Stack
+          bgcolor={"white"}
+          borderRadius={"8px"}
+          overflow={"hidden"}
+          zIndex={2}
+          position={"absolute"}
+          width={"250px"}
+          boxShadow={"10px 10px 10px #F5F5F5"}
+          border="1px #D6D8DB solid"
+          style={{ display: `${clicked ? "flex" : "none"}` }}
+        >
+          <Stack
+            color={"black"}
+            direction={"row"}
+            gap={2}
+            py={"12px"}
+            px={2}
+            borderBottom={"1px #D6D8DB solid"}
+          >
+            <EditOutlined />
+            {"Edit Name"}
+          </Stack>
+          <Stack color={"red"} direction={"row"} gap={2} py={"12px"} px={2}>
+            <DeleteOutline />
+            {"Delete Category"}
+          </Stack>
+        </Stack>
       </Stack>
     </Stack>
   );
 }
+// export const EditCategoryModal = () => {
+//   return (
+//     <>
+//       <Stack></Stack>
+//       {/* <Modal open={open} onClose={handleClose()}></Modal> */}
+//     </>
+//   );
+// };

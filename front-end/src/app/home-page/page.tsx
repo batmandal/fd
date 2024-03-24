@@ -84,7 +84,7 @@ export default function HomePage() {
           <Grid container spacing={4}>
             {fastDeliveries.map((item) => {
               return (
-                <Grid item lg={3} md={4} sm={6} xs={12}>
+                <Grid item lg={3} md={4} sm={6} xs={12} key={item.title}>
                   <FastDelivery
                     icon={item.icon}
                     title={item.title}
@@ -98,6 +98,7 @@ export default function HomePage() {
         <Stack gap={10} paddingBottom="82px">
           {foodChoice.map((item) => (
             <Foods
+              key={item.type}
               type={item.type}
               onClick={() => {
                 router.push("/menu-page");

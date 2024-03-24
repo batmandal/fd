@@ -51,9 +51,8 @@ export function Header() {
           <Stack direction="row" gap={1} alignItems="center">
             {text.map((a, index) => {
               return (
-                <Link href={a.link}>
+                <Link href={a.link} key={index}>
                   <Typography
-                    key={index}
                     fontWeight={700}
                     fontSize="14px"
                     padding="12px 16px"

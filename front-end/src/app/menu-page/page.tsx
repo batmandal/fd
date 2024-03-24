@@ -28,7 +28,7 @@ export default function MenuPage() {
       <Grid container spacing={2}>
         {categoryData.map((item, index) => {
           return (
-            <Grid item lg={3} md={4} sm={6} xs={12}>
+            <Grid item lg={3} md={4} sm={6} xs={12} key={index}>
               <Stack
                 borderRadius="8px"
                 border="1px solid #D6D8DB"
@@ -61,9 +61,9 @@ export default function MenuPage() {
         >
           {foodData
             .filter((f) => f.categoryName === menu)
-            .map((item) => {
+            .map((item, index) => {
               return (
-                <Grid item lg={3} md={4} sm={6} xs={12}>
+                <Grid item lg={3} md={4} sm={6} xs={12} key={index}>
                   <Food
                     {...item}
                     onClick={() => {

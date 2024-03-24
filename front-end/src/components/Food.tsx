@@ -59,7 +59,6 @@ export function Food(props: FoodProps) {
           </Typography>
           {food.saled && (
             <Stack
-              // direction="row"
               fontWeight={400}
               fontSize="18px"
               sx={{

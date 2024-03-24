@@ -31,6 +31,7 @@ export function Footer() {
           <Stack direction="row" justifyContent="space-between" width="100%">
             {allLink.map((item) => (
               <ButtonLink
+                key={item.label}
                 label={item.label}
                 onClick={() => {
                   if (item.label === "Нүүр") {

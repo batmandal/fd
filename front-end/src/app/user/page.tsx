@@ -88,7 +88,7 @@ export default function User() {
     </Stack>
   );
 }
-export const ExitModal = () => {
+const ExitModal = () => {
   const [open, setOpen] = useState(false);
   const { logout } = useAuth();
   const handleClose = () => {

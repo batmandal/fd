@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import { CSSProperties, Dispatch, SetStateAction, useState } from "react";
 
 type ToggleProps = {
   onClick: any;
@@ -16,7 +16,6 @@ export function Toggle(props: ToggleProps) {
         justifyContent: `${onToggle === true ? "flex-end" : "flex-start"}`,
         cursor: "pointer",
       }}
-      // style={style}
       width="28px"
       height="16px"
       borderRadius="20px"

@@ -27,7 +27,12 @@ const validationSchema = yup.object({
   image: yup.string(),
 });
 
-export function CreateFood() {
+type CreateFoodType = {
+  refetch: () => void;
+};
+
+export function CreateFood(props: CreateFoodType) {
+  const { refetch } = props;
   const [open, setOpen] = useState<boolean>(false);
   const handleClose = () => setOpen(false);
   const { foodPost } = useData();
@@ -47,15 +52,22 @@ export function CreateFood() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      foodPost(
-        values.name,
-        values.categoryName,
-        values.ingredient,
-        values.price,
-        onToggle,
-        values.saled,
-        newImageUrl
-      );
+      try {
+        foodPost(
+          values.name,
+          values.categoryName,
+          values.ingredient,
+          values.price,
+          onToggle,
+          values.saled,
+          newImageUrl
+        );
+      } catch (error) {
+        console.log("food post error", error);
+      }
+
+      refetch();
+      handleClose();
     },
   });
 
@@ -280,7 +292,6 @@ export function CreateFood() {
               // sx={{ background: "#393939", color: "white" }}
               onClick={() => {
                 formik.handleSubmit();
-                handleClose();
               }}
             >
               Continue

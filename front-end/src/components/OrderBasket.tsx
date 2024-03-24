@@ -31,6 +31,7 @@ export function OrderBasket() {
         {basketFood.map((cartFood) => {
           return (
             <Card
+              key={cartFood.food._id}
               name={cartFood.food.name}
               image={cartFood.food.image}
               price={cartFood.food.price}

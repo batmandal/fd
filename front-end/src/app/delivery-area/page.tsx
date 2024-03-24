@@ -1,16 +1,9 @@
 "use client";
 
-import { Container, Divider, Grid, Stack, Typography } from "@mui/material";
-import Image from "next/image";
-import {
-  APIProvider,
-  Map,
-  AdvancedMarker,
-  Pin,
-  InfoWindow,
-} from "@vis.gl/react-google-maps";
-import { GoogleMapsEmbed } from "@next/third-parties/google";
-import { useState } from "react";
+import { Container, Stack, Typography } from "@mui/material";
+// import Image from "next/image";
+// import { GoogleMapsEmbed } from "@next/third-parties/google";
+// import { useState } from "react";
 import { Star } from "@/assets/svg/Star";
 
 const address = [
@@ -29,7 +22,7 @@ export default function DeliveryArea() {
   return (
     <Container maxWidth="lg">
       <Stack gap="22px" py={6}>
-        <APIProvider apiKey="AIzaSyBAdenS5wzqAaY7Tnxlig46zOi01XCI4cE">
+        {/* <APIProvider apiKey="AIzaSyBAdenS5wzqAaY7Tnxlig46zOi01XCI4cE">
           <Stack height={"80vh"}>
             <Map
               zoom={9}
@@ -38,15 +31,15 @@ export default function DeliveryArea() {
                 lng: 106.9155,
               }}
             ></Map>
-            {/* <GoogleMapsEmbed
+            <GoogleMapsEmbed
               apiKey="AIzaSyBAdenS5wzqAaY7Tnxlig46zOi01XCI4cE"
               height={"80vh"}
               width={"100%"}
               mode="place"
               q="Brooklyn+Bridge,New+York,NY"
-            ></GoogleMapsEmbed> */}
+            ></GoogleMapsEmbed>
           </Stack>
-        </APIProvider>
+        </APIProvider> */}
         <Typography
           fontWeight={700}
           fontSize="22px"
@@ -65,7 +58,7 @@ export default function DeliveryArea() {
   );
 }
 
-export function Address(props: AddressType) {
+function Address(props: AddressType) {
   const { label } = props;
   return (
     <Stack
