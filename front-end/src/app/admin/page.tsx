@@ -20,8 +20,8 @@ import { useEffect, useState } from "react";
 export type CategoryStyleType = {
   categoryName: string;
   onClick: () => void;
-  onClick2: () => void;
-  clicked: boolean;
+  // onClick2: () => void;
+  // clicked: boolean;
   sx: any;
 };
 
@@ -43,7 +43,7 @@ export default function Admin() {
 
   useEffect(() => {}, []);
 
-  const [clicked, setClicked] = useState(false);
+  // const [clicked, setClicked] = useState(false);
 
   return (
     <Container maxWidth="lg" sx={{ display: "flex", height: "fit-content" }}>
@@ -60,8 +60,8 @@ export default function Admin() {
                 onClick={() => {
                   setActive(item.categoryName);
                 }}
-                onClick2={() => setClicked((prev) => !prev)}
-                clicked={clicked}
+                // onClick2={() => setClicked((prev) => !prev)}
+                // clicked={clicked}
                 sx={{
                   background: `${
                     active === item.categoryName ? "#18BA51" : null
@@ -104,7 +104,7 @@ export default function Admin() {
   );
 }
 function CategoryStyle(props: CategoryStyleType) {
-  const { categoryName, onClick, sx, clicked, onClick2 } = props;
+  const { categoryName, onClick, sx } = props;
 
   return (
     <Stack
@@ -124,7 +124,7 @@ function CategoryStyle(props: CategoryStyleType) {
       position={"relative"}
     >
       {categoryName}
-      <Stack bgcolor={"red"} onClick={onClick2}>
+      <Stack bgcolor={"red"}>
         <MoreVert />
         <Stack
           bgcolor={"white"}
@@ -135,7 +135,7 @@ function CategoryStyle(props: CategoryStyleType) {
           width={"250px"}
           boxShadow={"10px 10px 10px #F5F5F5"}
           border="1px #D6D8DB solid"
-          style={{ display: `${clicked ? "flex" : "none"}` }}
+          // style={{ display: `${clicked ? "flex" : "none"}` }}
         >
           <Stack
             color={"black"}
